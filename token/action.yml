@@ -13,4 +13,4 @@ outputs:
 
 runs:
   using: 'node12'
-  main: 'token.js'
+  main: 'index.js'

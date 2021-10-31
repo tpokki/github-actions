@@ -16,7 +16,6 @@ auth({
     type: "installation",
     installationId: installationId,
 }).then(resp => {
-    console.log(`::add-mask::${resp.token}`)
     console.log(`::set-output name=token::${resp.token}`)
     process.exit(0);
 }).catch(err => {
