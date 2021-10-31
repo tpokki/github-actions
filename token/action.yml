@@ -1,0 +1,16 @@
+name: 'Create Access Token'
+description: 'Create token from GitHub App credentials'
+inputs:
+  app_id:
+    required: false
+  installation_id:
+    required: false
+  private_key:
+    required: true
+outputs:
+  token:
+    description: 'access token'
+
+runs:
+  using: 'node12'
+  main: 'token.js'
