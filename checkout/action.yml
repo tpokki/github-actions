@@ -1,0 +1,22 @@
+name: 'Checkout'
+description: 'Checks out the repository with application credentials, reusable for other github.com checkouts'
+inputs:
+  app_id:
+    required: false
+  installation_id:
+    required: false
+  private_key:
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+  - id: create-token
+    uses: tpokki/github-actions/token@main
+  - uses: actions/checkout@v2
+    with:
+      token: ${{ steps.create-token.outputs.token }}
+  - run: |
+      git config --global url."https://x-access-token:${{ steps.create-token.outputs.token }}@github.com".insteadOf https://github.com
+      git config user.name github-actions
+      git config user.email github-actions@github.com
