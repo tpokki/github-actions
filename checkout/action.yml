@@ -13,6 +13,10 @@ runs:
   steps:
   - id: create-token
     uses: tpokki/github-actions/token@main
+    with:
+      app_id: ${{ inputs.app_id }}
+      installation_id: ${{ inputs.installation_id }}
+      private_key: ${{ inputs.private_key }}
   - uses: actions/checkout@v2
     with:
       token: ${{ steps.create-token.outputs.token }}
