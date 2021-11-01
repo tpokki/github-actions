@@ -16,7 +16,8 @@ runs:
   - uses: actions/checkout@v2
     with:
       token: ${{ steps.create-token.outputs.token }}
-  - run: |
+  - shell: bash
+    run: |
       git config --global url."https://x-access-token:${{ steps.create-token.outputs.token }}@github.com".insteadOf https://github.com
       git config user.name github-actions
       git config user.email github-actions@github.com
