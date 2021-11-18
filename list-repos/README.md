@@ -8,8 +8,12 @@ This action produces list of repositories for currrent organization/owner. The d
 The given token must have sufficient privileges to list all repositories.
 
 ```
-      - uses: tpokki/github-actions/list-repos@main
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          extraectedField: clone_url
+    - uses: tpokki/github-actions/list-repos@main
+      id: list-repos
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        extraectedField: clone_url
+    - name: Debug
+        run: |
+          echo repositories are: ${{ steps.list-repos.outputs.repos }}
 ```
