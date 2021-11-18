@@ -14,6 +14,7 @@ inputs:
     description: 'Upload backup as artifact in current repository'
     default: false
     required: false
+    type: boolean
   artifact_retention:
     description: 'Retention period for locally stored artifacts'
     default: 7
@@ -22,6 +23,7 @@ inputs:
     description: 'Upload backup artifact to Google Cloud Storage, requires gcp_bucket and gcp_sa_key input parameters'
     required: false
     default: false
+    type: boolean
   gcp_bucket:
     description: 'Google Cloud Storage bucket id to which the backup artifact is uploaded'
     required: false
@@ -68,7 +70,7 @@ runs:
       echo ::set-output name=archive_name::${DATE}.tar.gz
       echo ::set-output name=archive_file::${RUNNER_TEMP}/${DATE}.tar.gz
 
-  - if: inputs.artifact_enabled == 'true'
+  - if: inputs.artifact_enabled == true
     name: Upload backup as artifact
     uses: actions/upload-artifact@v2
     with:
@@ -76,14 +78,14 @@ runs:
       path: ${{ steps.create-archive.outputs.archive_file }}
       retention-days: ${{ inputs.artifact_retention }}
 
-  - if: inputs.gcp_enabled == 'true'
+  - if: inputs.gcp_enabled == true
     name: Set up Cloud SDK
     uses: google-github-actions/setup-gcloud@master
     with:
       service_account_key: ${{ inputs.gcp_sa_key }}
       export_default_credentials: true
 
-  - if: inputs.gcp_enabled == 'true'
+  - if: inputs.gcp_enabled == true
     name: Store Backup
     shell: bash
     run: |
