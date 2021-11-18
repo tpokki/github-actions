@@ -12,7 +12,7 @@ The given token must have sufficient privileges to list all repositories.
       id: list-repos
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        extraectedField: clone_url
+        extractedField: clone_url
     - name: Debug
         run: |
           echo repositories are: ${{ steps.list-repos.outputs.repos }}
