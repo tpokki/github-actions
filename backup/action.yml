@@ -54,7 +54,7 @@ runs:
   - shell: bash
     id: create-archive
     run: |
-      cd ${RUNNER_TEMP
+      cd ${RUNNER_TEMP}
       DATE=$(date "+%Y%m%d%H%M%S")
       mkdir ${DATE}
 
