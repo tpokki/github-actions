@@ -84,5 +84,6 @@ runs:
 
   - if: ${{ inputs.gcp_enabled }}
     name: Store Backup
+    shell: bash
     run: |
       gsutil cp ${{ steps.create-archive.outputs.archive }} gs://${{ inputs.gcp_bucket }}/${{ steps.create-archive.outputs.archive }}
