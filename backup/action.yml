@@ -1,0 +1,90 @@
+name: 'Checkout'
+description: 'Checks out the repository with application credentials, reusable for other github.com checkouts'
+inputs:
+  app_id:
+    description: 'GitHub App id for cloning the repositories'
+    required: false
+  installation_id:
+    description: 'GitHub App installation id for cloing the repositories'
+    required: false
+  private_key:
+    description: 'GitHub App private key for cloning the repositories'
+    required: true
+  artifact_enabled:
+    description: 'Upload backup as artifact in current repository'
+    default: false
+    required: false
+  artifact_retention:
+    description: 'Retention period for locally stored artifacts'
+    default: 7
+    required: false
+  gcp_enabled:
+    description: 'Upload backup artifact to Google Cloud Storage, requires gcp_bucket and gcp_sa_key input parameters'
+    required: false
+    default: false
+  gcp_bucket:
+    description: 'Google Cloud Storage bucket id to which the backup artifact is uploaded'
+    required: false
+  gcp_sa_key:
+    description: 'Service Account key to store backup to Google Cloud Storage'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+  - id: create-token
+    uses: tpokki/github-actions/token@4693cff68dde8a0893c8ffbf64b5875ff47113a0
+    with:
+      app_id: ${{ inputs.app_id }}
+      installation_id: ${{ inputs.installation_id }}
+      private_key: ${{ inputs.private_key }}
+
+  - uses: tpokki/github-actions/list-repos@4693cff68dde8a0893c8ffbf64b5875ff47113a0
+    id: list-repos
+    with:
+      GITHUB_TOKEN: ${{ steps.create-token.outputs.token }}
+      extractedField: clone_url
+
+  - shell: bash
+    run: |
+      git config --global url."https://x-access-token:${{ steps.create-token.outputs.token }}@github.com".insteadOf https://github.com
+      git config --global user.name github-actions
+      git config --global user.email github-actions@github.com
+
+  - shell: bash
+    id: create-archive
+    run: |
+      cd ${RUNNER_TEMP}
+      DATE=$(date "+%Y%m%d%H%M%S")
+      mkdir ${DATE}
+
+      cd ${DATE}/
+      echo ${{ steps.list-repos.outputs.repos }} | tr , \\\n | while read repo_url; do
+        git clone --bare ${repo_url}
+      done
+      cd ../
+
+      tar czf ${DATE}.tar.gz ${DATE}/
+      echo ::set-output name=archive_name::${DATE}.tar.gz
+      echo ::set-output name=archive_file::${RUNNER_TEMP}/${DATE}.tar.gz
+
+  - if: inputs.artifact_enabled == 'true'
+    name: Upload backup as artifact
+    uses: actions/upload-artifact@v2
+    with:
+      name: ${{ steps.create-archive.outputs.archive_name }}
+      path: ${{ steps.create-archive.outputs.archive_file }}
+      retention-days: ${{ inputs.artifact_retention }}
+
+  - if: inputs.gcp_enabled == 'true'
+    name: Set up Cloud SDK
+    uses: google-github-actions/setup-gcloud@master
+    with:
+      service_account_key: ${{ inputs.gcp_sa_key }}
+      export_default_credentials: true
+
+  - if: inputs.gcp_enabled == 'true'
+    name: Store Backup
+    shell: bash
+    run: |
+      gsutil cp ${{ steps.create-archive.outputs.archive_file }} gs://${{ inputs.gcp_bucket }}/${{ steps.create-archive.outputs.archive_name }}
