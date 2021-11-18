@@ -9,7 +9,7 @@ Example workflow file that implements backups that are stored both as GitHub Act
 name: Backup
 on:
   schedule:
-    cron: '42 00 * * *'
+    - cron: '42 00 * * *'
 
 jobs:
   nightly-backup-job:
