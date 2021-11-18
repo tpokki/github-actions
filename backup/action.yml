@@ -54,15 +54,15 @@ runs:
   - shell: bash
     id: create-archive
     run: |
-      echo ${{ steps.list-repos.outputs.repos }}|tr , \\\n > repositories.txt
+      cd ${RUNNER_TEMP
       DATE=$(date "+%Y%m%d%H%M%S")
-
       mkdir ${DATE}
-      cd ${DATE}
-      while read repo_url; do
+
+      cd ${DATE}/
+      echo ${{ steps.list-repos.outputs.repos }} | tr , \\\n | while read repo_url; do
         git clone --bare ${repo_url}
-      done < repositories.txt
-      cd ..
+      done
+      cd ../
 
       tar czf ${DATE}.tar.gz ${DATE}/
       echo ::set-output name=archive::${DATE}.tar.gz
