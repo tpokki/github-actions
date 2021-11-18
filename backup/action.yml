@@ -68,7 +68,7 @@ runs:
       echo ::set-output name=archive_name::${DATE}.tar.gz
       echo ::set-output name=archive_file::${RUNNER_TEMP}/${DATE}.tar.gz
 
-  - if: inputs.artifact_enabled == true
+  - if: inputs.artifact_enabled == 'true'
     name: Upload backup as artifact
     uses: actions/upload-artifact@v2
     with:
@@ -76,14 +76,14 @@ runs:
       path: ${{ steps.create-archive.outputs.archive_file }}
       retention-days: ${{ inputs.artifact_retention }}
 
-  - if: inputs.gcp_enabled == true
+  - if: inputs.gcp_enabled == 'true'
     name: Set up Cloud SDK
     uses: google-github-actions/setup-gcloud@master
     with:
       service_account_key: ${{ inputs.gcp_sa_key }}
       export_default_credentials: true
 
-  - if: inputs.gcp_enabled == true
+  - if: inputs.gcp_enabled == 'true'
     name: Store Backup
     shell: bash
     run: |
