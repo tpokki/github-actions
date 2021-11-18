@@ -65,14 +65,15 @@ runs:
       cd ../
 
       tar czf ${DATE}.tar.gz ${DATE}/
-      echo ::set-output name=archive::${DATE}.tar.gz
+      echo ::set-output name=archive_name::${DATE}.tar.gz
+      echo ::set-output name=archive_file::${RUNNER_TEMP}/${DATE}.tar.gz
 
   - if: ${{ inputs.artifact_enabled }}
     name: Upload backup as artifact
     uses: actions/upload-artifact@v2
     with:
-      name: ${{ steps.create-archive.outputs.archive }}
-      path: ${{ steps.create-archive.outputs.archive }}
+      name: ${{ steps.create-archive.outputs.archive_name }}
+      path: ${{ steps.create-archive.outputs.archive_file }}
       retention-days: ${{ inputs.artifact_retention }}
 
   - if: ${{ inputs.gcp_enabled }}
@@ -86,4 +87,4 @@ runs:
     name: Store Backup
     shell: bash
     run: |
-      gsutil cp ${{ steps.create-archive.outputs.archive }} gs://${{ inputs.gcp_bucket }}/${{ steps.create-archive.outputs.archive }}
+      gsutil cp ${{ steps.create-archive.outputs.archive_file }} gs://${{ inputs.gcp_bucket }}/${{ steps.create-archive.outputs.archive_name }}
