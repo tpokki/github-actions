@@ -1,0 +1,13 @@
+name: 'List Repositores'
+description: 'Lists all repository clone urls for current organization/owner'
+inputs:
+  GITHUB_TOKEN:
+    required: true
+  extractedField:
+    description: 'The name of the field that is extraected from list of repositories. Default is "name"'
+    required: false
+    default: 'name'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
