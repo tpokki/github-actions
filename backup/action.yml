@@ -109,12 +109,12 @@ runs:
     name: Configure AWS Credentials
     uses: aws-actions/configure-aws-credentials@v1
     with:
-      aws-access-key-id: ${{ aws_access_key_id }}
-      aws-secret-access-key: ${{ aws_secret_access_key }}
-      aws-region: ${{ aws_region }}
+      aws-access-key-id: ${{ input.saws_access_key_id }}
+      aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
+      aws-region: ${{ inputs.aws_region }}
 
   - if: inputs.aws_enabled == 'true'
     name: Store Backup to AWS
     shell: bash
     run: |
-      aws s3 cp ${{ steps.create-archive.outputs.archive_file }} s3://${{ aws_s3 }}/${{ steps.create-archive.outputs.archive_file }}
+      aws s3 cp ${{ steps.create-archive.outputs.archive_file }} s3://${{ inputs.aws_s3 }}/${{ steps.create-archive.outputs.archive_file }}
