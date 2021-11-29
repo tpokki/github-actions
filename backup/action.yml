@@ -109,7 +109,7 @@ runs:
     name: Configure AWS Credentials
     uses: aws-actions/configure-aws-credentials@v1
     with:
-      aws-access-key-id: ${{ inputs.saws_access_key_id }}
+      aws-access-key-id: ${{ inputs.aws_access_key_id }}
       aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
       aws-region: ${{ inputs.aws_region }}
 
