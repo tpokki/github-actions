@@ -117,4 +117,4 @@ runs:
     name: Store Backup to AWS
     shell: bash
     run: |
-      aws s3 cp ${{ steps.create-archive.outputs.archive_file }} s3://${{ inputs.aws_s3 }}/${{ steps.create-archive.outputs.archive_file }}
+      aws s3 cp ${{ steps.create-archive.outputs.archive_file }} s3://${{ inputs.aws_s3 }}/${{ steps.create-archive.outputs.archive_name }}
