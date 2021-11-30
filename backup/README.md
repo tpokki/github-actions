@@ -1,11 +1,38 @@
 # Backup
 
-This action uses the GitHub App credentials to clone all the repositories from the organization, and store them as tar.gz file in Google Storage Bucket.
+This action uses the GitHub App credentials to clone all the repositories from the organization, and store them as tar.gz file in GitHub Action artifact, Google Storage Bucket, AWS S3 or any combination of them.
 
 ## Usage
+
+Input variables for different storage types:
+
+GitHub Action artifact:
+```yaml
+    artifact_enabled: true
+    artifact_retention: <days>
+```
+
+Google Storage Bucket:
+```yaml
+    gcp_enabled: true
+    gcp_bucket: <bucket name>
+    gcp_sa_key: <service account key>
+```
+
+AWS S3:
+```yaml
+    aws_enabled: true
+    aws_region: <aws region>
+    aws_s3: <bucket name>
+    aws_access_key_id: <aws access key id>
+    aws_secret_access_key: <aws secret access key>
+```
+
+
+## Example
 Example workflow file that implements backups that are stored both as GitHub Action artifacts (last 7), as well as copy to Google Cloud Storage.
 
-```
+```yaml
 name: Backup
 on:
   schedule:
