@@ -28,6 +28,22 @@ inputs:
   gcp_sa_key:
     description: 'Service Account key to store backup to Google Cloud Storage'
     required: false
+  aws_enabled:
+    description: 'Upload backup artifact to AWS S3, requires aws_region, aws_access_key_id, aws_secret_access_key and aws_s3 as input parameters'
+    required: false
+    default: false
+  aws_region:
+    description: 'AWS region for authentication and S3'
+    required: false
+  aws_access_key_id:
+    description: 'AWS access key id'
+    required: false
+  aws_secret_access_key:
+    description: 'AWS secret access key'
+    required: false
+  aws_s3:
+    description: 'AWS S3 bucket name'
+    required: false
 
 runs:
   using: 'composite'
@@ -84,7 +100,21 @@ runs:
       export_default_credentials: true
 
   - if: inputs.gcp_enabled == 'true'
-    name: Store Backup
+    name: Store Backup to GCP
     shell: bash
     run: |
       gsutil cp ${{ steps.create-archive.outputs.archive_file }} gs://${{ inputs.gcp_bucket }}/${{ steps.create-archive.outputs.archive_name }}
+
+  - if: inputs.aws_enabled == 'true'
+    name: Configure AWS Credentials
+    uses: aws-actions/configure-aws-credentials@v1
+    with:
+      aws-access-key-id: ${{ inputs.aws_access_key_id }}
+      aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
+      aws-region: ${{ inputs.aws_region }}
+
+  - if: inputs.aws_enabled == 'true'
+    name: Store Backup to AWS
+    shell: bash
+    run: |
+      aws s3 cp ${{ steps.create-archive.outputs.archive_file }} s3://${{ inputs.aws_s3 }}/${{ steps.create-archive.outputs.archive_name }}
