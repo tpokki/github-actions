@@ -12,7 +12,7 @@ runs:
   using: 'composite'
   steps:
   - id: create-token
-    uses: tpokki/github-actions/token@main
+    uses: igt-open-source/github-actions/token@main
     with:
       app_id: ${{ inputs.app_id }}
       installation_id: ${{ inputs.installation_id }}

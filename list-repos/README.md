@@ -8,7 +8,7 @@ This action produces list of repositories for currrent organization/owner. The d
 The given token must have sufficient privileges to list all repositories.
 
 ```
-    - uses: tpokki/github-actions/list-repos@main
+    - uses: igt-open-source/github-actions/list-repos@main
       id: list-repos
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

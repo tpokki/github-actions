@@ -5,7 +5,7 @@ This action converts application credentials (private key, app id, installation 
 ## Usage
 ```
   - id: create-token
-    uses: tpokki/github-actions/token@main
+    uses: igt-open-source/github-actions/token@main
     with:
       private_key: ${{ secrets.actions_private_key }}
       app_id: 12345

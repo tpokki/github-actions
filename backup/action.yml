@@ -49,13 +49,13 @@ runs:
   using: 'composite'
   steps:
   - id: create-token
-    uses: tpokki/github-actions/token@4693cff68dde8a0893c8ffbf64b5875ff47113a0
+    uses: igt-open-source/github-actions/token@4693cff68dde8a0893c8ffbf64b5875ff47113a0
     with:
       app_id: ${{ inputs.app_id }}
       installation_id: ${{ inputs.installation_id }}
       private_key: ${{ inputs.private_key }}
 
-  - uses: tpokki/github-actions/list-repos@4693cff68dde8a0893c8ffbf64b5875ff47113a0
+  - uses: igt-open-source/github-actions/list-repos@4693cff68dde8a0893c8ffbf64b5875ff47113a0
     id: list-repos
     with:
       GITHUB_TOKEN: ${{ steps.create-token.outputs.token }}

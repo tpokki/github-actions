@@ -45,7 +45,7 @@ jobs:
     steps:
       - name: Backup
         id: backup
-        uses: tpokki/github-actions/backup@main
+        uses: igt-open-source/github-actions/backup@main
         with:
           private_key: ${{ secrets.GITHUB_APP_KEY }}
           app_id: 123456

@@ -6,7 +6,7 @@ is adjusted to enable further checkouts and git actions to be done with applicat
 
 ## Usage
 ```
-      - uses: tpokki/github-actions/checkout@main
+      - uses: igt-open-source/github-actions/checkout@main
         with:
           private_key: ${{ secrets.actions_private_key }}
           app_id: 12345
