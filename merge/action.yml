@@ -1,0 +1,14 @@
+name: 'List Repositores'
+description: 'Lists all repository clone urls for current organization/owner'
+inputs:
+  GITHUB_TOKEN:
+    required: true
+  head:
+    required: true
+  base:
+    required: false
+    default: 'main'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
