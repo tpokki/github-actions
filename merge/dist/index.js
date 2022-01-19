@@ -7,6 +7,8 @@ const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 const head = core.getInput('head');
 const base = core.getInput('base');
 
+core.info(`merging ${head} to ${base} ...`)
+
 octokit.request('POST /repos/{owner}/{repo}/merges', {
     owner: owner,
     repo: repo,
