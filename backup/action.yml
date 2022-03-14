@@ -1,6 +1,9 @@
 name: 'Checkout'
 description: 'Checks out the repository with application credentials, reusable for other github.com checkouts'
 inputs:
+  topic:
+    description: 'Filter repositories by topic'
+    required: false
   app_id:
     description: 'GitHub App id for cloning the repositories'
     required: false
@@ -12,26 +15,29 @@ inputs:
     required: true
   artifact_enabled:
     description: 'Upload backup as artifact in current repository'
-    default: false
+    default: 'false'
     required: false
   artifact_retention:
     description: 'Retention period for locally stored artifacts'
-    default: 7
+    default: '7'
     required: false
   gcp_enabled:
     description: 'Upload backup artifact to Google Cloud Storage, requires gcp_bucket and gcp_sa_key input parameters'
     required: false
-    default: false
+    default: 'false'
   gcp_bucket:
     description: 'Google Cloud Storage bucket id to which the backup artifact is uploaded'
     required: false
-  gcp_sa_key:
-    description: 'Service Account key to store backup to Google Cloud Storage'
+  gcp_wip:
+    description: 'Workload Identity Provider for authentication'
+    required: false
+  gcp_wip_sa:
+    description: 'Service Account used to store backup to Google Cloud Storage'
     required: false
   aws_enabled:
     description: 'Upload backup artifact to AWS S3, requires aws_region, aws_access_key_id, aws_secret_access_key and aws_s3 as input parameters'
     required: false
-    default: false
+    default: 'false'
   aws_region:
     description: 'AWS region for authentication and S3'
     required: false
@@ -55,11 +61,12 @@ runs:
       installation_id: ${{ inputs.installation_id }}
       private_key: ${{ inputs.private_key }}
 
-  - uses: tpokki/github-actions/list-repos@4693cff68dde8a0893c8ffbf64b5875ff47113a0
+  - uses: tpokki/github-actions/list-repos@v4
     id: list-repos
     with:
       GITHUB_TOKEN: ${{ steps.create-token.outputs.token }}
       extractedField: clone_url
+      topic: ${{ inputs.topic }}
 
   - shell: bash
     run: |
@@ -93,17 +100,20 @@ runs:
       retention-days: ${{ inputs.artifact_retention }}
 
   - if: inputs.gcp_enabled == 'true'
-    name: Set up Cloud SDK
-    uses: google-github-actions/setup-gcloud@master
+    name: Authenticate to Google Cloud
+    uses: google-github-actions/auth@v0
+    id: auth
     with:
-      service_account_key: ${{ inputs.gcp_sa_key }}
-      export_default_credentials: true
+      workload_identity_provider: ${{ inputs.gcp_wip }}
+      service_account: ${{ inputs.gcp_wip_sa }}
 
   - if: inputs.gcp_enabled == 'true'
     name: Store Backup to GCP
-    shell: bash
-    run: |
-      gsutil cp ${{ steps.create-archive.outputs.archive_file }} gs://${{ inputs.gcp_bucket }}/${{ steps.create-archive.outputs.archive_name }}
+    id: upload-files-to-gcp
+    uses: 'google-github-actions/upload-cloud-storage@v0.5.0'
+    with:
+      path: ${{ steps.create-archive.outputs.archive_file }}
+      destination: ${{ inputs.gcp_bucket }}
 
   - if: inputs.aws_enabled == 'true'
     name: Configure AWS Credentials

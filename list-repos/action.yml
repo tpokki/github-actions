@@ -7,6 +7,9 @@ inputs:
     description: 'The name of the field that is extraected from list of repositories. Default is "name"'
     required: false
     default: 'name'
+  topic:
+    description: 'Filter repositories by topic'
+    required: false
 
 runs:
   using: 'node12'
