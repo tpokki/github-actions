@@ -28,6 +28,12 @@ AWS S3:
     aws_secret_access_key: <aws secret access key>
 ```
 
+Add permission scopes for your backup action:
+```yaml
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+```
 
 ## Example
 Example workflow file that implements backups that are stored both as GitHub Action artifacts (last 7), as well as copy to Google Cloud Storage.
@@ -42,6 +48,9 @@ jobs:
   nightly-backup-job:
     name: Backup
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Backup
         id: backup
