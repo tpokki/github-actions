@@ -114,6 +114,9 @@ runs:
     with:
       path: ${{ steps.create-archive.outputs.archive_file }}
       destination: ${{ inputs.gcp_bucket }}
+      gzip: false
+      headers: |-
+        content-type: application/x-tar
 
   - if: inputs.aws_enabled == 'true'
     name: Configure AWS Credentials
