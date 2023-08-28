@@ -7,7 +7,7 @@ This action merges `head` to `base` branch.
 ## Usage
 
 ```
-    - uses: igt-open-source/github-actions/merge@main
+    - uses: tpokki/github-actions/merge@main
       id: merge
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

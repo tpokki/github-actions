@@ -2,15 +2,18 @@ name: 'Create Access Token'
 description: 'Create token from GitHub App credentials'
 inputs:
   app_id:
+    description: 'GitHub App id'
     required: false
   installation_id:
+    description: 'GitHub App installation id'
     required: false
   private_key:
+    description: 'GitHub App private key'
     required: true
 outputs:
   token:
     description: 'access token'
 
 runs:
-  using: 'node12'
-  main: 'index.js'
+  using: 'node18'
+  main: 'dist/index.js'

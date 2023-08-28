@@ -2,13 +2,16 @@ name: 'List Repositores'
 description: 'Lists all repository clone urls for current organization/owner'
 inputs:
   GITHUB_TOKEN:
+    description: 'GitHub token'
     required: true
   head:
+    description: 'Branch that is merged to base branch'
     required: true
   base:
+    description: 'Branch into which the head branch is merged to'
     required: false
     default: 'main'
 
 runs:
-  using: 'node12'
+  using: 'node18'
   main: 'dist/index.js'

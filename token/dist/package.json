@@ -1,0 +1,17 @@
+{
+  "name": "token",
+  "version": "1.0.0",
+  "description": "This action converts application credentials (private key, app id, installation id) to access token that can be used to interact with GitHub API or perform git operations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1",
+    "@octokit/auth-app": "^6.0.0"
+  }
+}
