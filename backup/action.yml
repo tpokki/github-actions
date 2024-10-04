@@ -93,7 +93,7 @@ runs:
 
   - if: inputs.artifact_enabled == 'true'
     name: Upload backup as artifact
-    uses: actions/upload-artifact@v2
+    uses: actions/upload-artifact@v4
     with:
       name: ${{ steps.create-archive.outputs.archive_name }}
       path: ${{ steps.create-archive.outputs.archive_file }}
