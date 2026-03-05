@@ -16,7 +16,7 @@ auth({
     type: "installation",
     installationId: installationId,
 }).then(resp => {
-    console.log(`::set-output name=token::${resp.token}`)
+    core.setOutput('token', resp.token);
     process.exit(0);
 }).catch(err => {
     console.error(err)
